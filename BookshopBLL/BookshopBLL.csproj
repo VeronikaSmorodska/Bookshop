@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bookshop.Dapper\Bookshop.Dapper.csproj" />
+    <ProjectReference Include="..\BookshopPersistenceLayer\BookshopPersistenceLayer.csproj" />
+  </ItemGroup>
+
+</Project>

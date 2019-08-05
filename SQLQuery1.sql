@@ -1,0 +1,1 @@
+﻿SELECT * FROM Books JOIN Authopships ON (Books.ID = Authopships.BookId) JOIN Authors ON (Authopships.AuthorId = Authors.ID)

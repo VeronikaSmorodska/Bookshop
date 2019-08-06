@@ -5,34 +5,29 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BookshopPersistenceLayer.Repository
 {
     public class AuthorRepository : IAuthorRepository
     {
-        private BookshopContext db;
-
+        private readonly BookshopContext db;
         public AuthorRepository(BookshopContext db)
         {
             this.db = db;
         }
-
         public void Create(Author author)
         {
-           
             db.Authors.Add(author);
         }
-
-        public void Delete(Guid id)
+        public Author Delete(Guid id)
         {
             Author author = db.Authors.Find(id);
             if (author != null)
             {
                 db.Authors.Remove(author);
             }
+            return author;
         }
-
         public Author Get(Guid id)
         {
             return db.Authors
@@ -41,16 +36,14 @@ namespace BookshopPersistenceLayer.Repository
                 .Where(a=>a.AuthorId==id)
                 .FirstOrDefault();
         }
-
         public IEnumerable<Author> GetAll()
         {
             return db.Authors.Include(a => a.Authorships)
                              .ThenInclude(b => b.Book);
         }
-
         public void Update(Author author)
         {
-            var enrty = db.Entry(author);
+            db.Entry(author);
             db.Update(author);
         }
         public IEnumerable<Author> GetAuthorsByBookId(Guid bookId)
@@ -59,8 +52,6 @@ namespace BookshopPersistenceLayer.Repository
                                                           .Where(a => a.Authorships
                                                           .Any(b => b.BookId == bookId));
             return authorOfBooks;
-
         }
     }
-
 }

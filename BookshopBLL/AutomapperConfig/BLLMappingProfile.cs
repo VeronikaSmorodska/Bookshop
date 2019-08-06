@@ -2,7 +2,6 @@
 using BookshopBLL.DTO;
 using System.Collections.Generic;
 using System;
-//using Bookshop.Dapper.Entities;
 using BookshopPersistenceLayer.Entities;
 
 namespace BookshopBLL.Automapper
@@ -13,9 +12,6 @@ namespace BookshopBLL.Automapper
         {
             CreateMap<User, UserDTO>();
             CreateMap<UserDTO, User>();
-
-
-
             CreateMap<Book, BookDTO>().AfterMap((book, bookDTO, context) =>
             {
                 if (book.BookId == null)
@@ -27,7 +23,6 @@ namespace BookshopBLL.Automapper
                 {
                     return;
                 }
-                
                 foreach (var authorship in book.Authorships)
                 {
                     bookDTO.Authors.Add(new AuthorDTO()
@@ -36,10 +31,8 @@ namespace BookshopBLL.Automapper
                         Name = authorship.Author.Name,
                        
                     });
-
                 }
             });
-
             CreateMap<BookDTO, Book>().AfterMap((bookDTO, book, context) =>
             {
                 if (bookDTO.BookId == null)
@@ -54,14 +47,10 @@ namespace BookshopBLL.Automapper
                         BookId = bookDTO.BookId,
                         AuthorId = author.AuthorId
                     });
-                    
                 }
             });
-
-
             CreateMap<Author, AuthorDTO>().AfterMap((author, authorDTO, context) =>
             {
-
                 if (authorDTO.AuthorId == null)
                 {
                     authorDTO.AuthorId = Guid.NewGuid();
@@ -79,14 +68,10 @@ namespace BookshopBLL.Automapper
                         Title = authorship.Book.Title,
                         Price = authorship.Book.Price
                     });
-                    
                 }
-
             });
-
             CreateMap<AuthorDTO, Author>().AfterMap((authorDTO, author, context) =>
             {
-
                 if (author.AuthorId == null)
                 {
                     author.AuthorId = Guid.NewGuid();
@@ -99,7 +84,6 @@ namespace BookshopBLL.Automapper
                         AuthorId = authorDTO.AuthorId,
                         BookId = book.BookId
                     });
-                    
                 }
             });
         }

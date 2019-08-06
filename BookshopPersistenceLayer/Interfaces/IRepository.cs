@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BookshopPersistenceLayer.Interfaces
 {
@@ -10,7 +9,6 @@ namespace BookshopPersistenceLayer.Interfaces
         T Get(Guid id);
         void Create(T item);
         void Update(T item);
-        void Delete(Guid id);
-        
+        T Delete(Guid id);
     }
 }

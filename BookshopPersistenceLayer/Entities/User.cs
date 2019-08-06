@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BookshopPersistenceLayer.Entities
 {
@@ -12,9 +10,5 @@ namespace BookshopPersistenceLayer.Entities
         public string Login { get; set; }
         public string Password { get; set; }
         public Role Role { get; set; }
-        public User()
-        {
-            UserId = Guid.NewGuid();
-        }
     }
 }

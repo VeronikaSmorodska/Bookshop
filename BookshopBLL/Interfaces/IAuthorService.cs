@@ -11,7 +11,7 @@ namespace BookshopBLL.Interfaces
         IEnumerable<AuthorDTO> GetAll();
         AuthorDTO Get(Guid id);
         void Update(AuthorDTO author);
-        void Delete(Guid id);
+        AuthorDTO Delete(Guid id);
         void Dispose();
     }
 }

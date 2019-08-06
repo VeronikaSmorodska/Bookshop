@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using AutoMapper;
 using BookshopBLL.DTO;
 using BookshopBLL.Interfaces;
 using BookshopPersistenceLayer.Interfaces;
 using BookshopPersistenceLayer.Entities;
-//using Bookshop.Dapper.Entities;
-//using Bookshop.Dapper.Interfaces;
 
 namespace BookshopBLL.Services
 {
@@ -25,11 +21,9 @@ namespace BookshopBLL.Services
         {
             return mapper.Map<IEnumerable<Author>, List<AuthorDTO>>(Database.Authors.GetAll());
         }
-
         public IEnumerable<BookDTO> GetBooks(Guid authorId)
         {
             return mapper.Map<IEnumerable<Book>, List<BookDTO>>(Database.Books.GetBooksByAuthorId(authorId));
-
         }
         public AuthorDTO Get(Guid id)
         {
@@ -40,11 +34,11 @@ namespace BookshopBLL.Services
             Database.Authors.Create(mapper.Map<Author>(authorDTO));
             Database.Save();
         }
-
-        public void Delete(Guid id)
+        public AuthorDTO Delete(Guid id)
         {
-            Database.Authors.Delete(id);
+            AuthorDTO authorDto= mapper.Map<Author, AuthorDTO>(Database.Authors.Delete(id));
             Database.Save();
+            return authorDto;
         }
         public void Update(AuthorDTO authorDTO)
         {
@@ -55,6 +49,5 @@ namespace BookshopBLL.Services
         {
             Database.Dispose();
         }
-
     }
 }

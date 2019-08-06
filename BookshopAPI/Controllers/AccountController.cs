@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using BookshopAPI.Models;
 using BookshopBLL.DTO;
 using BookshopBLL.Interfaces;
-using BookshopPersistenceLayer.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -32,20 +30,21 @@ namespace BookshopAPI.Controllers
             return Ok();
         }
         [HttpPost("[action]")]
-
         public async Task<IActionResult> Login(LoginViewModel loginviewmodel)
         {
             if (ModelState.IsValid)
             {
                 bool isARealUser = _userService.TestUser(loginviewmodel.Login, loginviewmodel.Password);
-
+                if (isARealUser == false)
+                {
+                    return BadRequest("User with such login and passwod does not exist.");
+                }
                 if (isARealUser == true)
                 {
                     UserDTO userDto = _userService.GetByLogin(loginviewmodel.Login);
                     UserViewModel userviewmodel = mapper.Map<UserViewModel>(userDto);
                     await Authenticate(userviewmodel);
                     return Ok(loginviewmodel);
-                    //return RedirectToAction("Index");
                 }
                 ModelState.AddModelError("", "Invalid login or password");
             }
@@ -57,7 +56,6 @@ namespace BookshopAPI.Controllers
             return Ok();
         }
         [HttpPost("[action]")]
-
         public async Task<IActionResult> Register(RegisterViewModel registerviewmodel)
         {
             try
@@ -65,20 +63,20 @@ namespace BookshopAPI.Controllers
                 if (ModelState.IsValid)
                 {
                     bool isLoginTaken = _userService.TestLogin(registerviewmodel.Login);
-                   
-                    if (isLoginTaken == false)
+                    if (isLoginTaken == true)
                     {
-                        UserViewModel userviewmodel = new UserViewModel
-                        {
-                            Name = registerviewmodel.Name,
-                            Surname = registerviewmodel.Surname,
-                            Login = registerviewmodel.Login,
-                            Password = registerviewmodel.Password,
-                            Role = RoleViewModel.Member
-                        };
-                        _userService.Create(mapper.Map<UserDTO>(userviewmodel));
-                        await Authenticate(userviewmodel);
+                        return BadRequest("Login must be unique.");
                     }
+                    UserViewModel userviewmodel = new UserViewModel
+                    {
+                        Name = registerviewmodel.Name,
+                        Surname = registerviewmodel.Surname,
+                        Login = registerviewmodel.Login,
+                        Password = registerviewmodel.Password,
+                        Role = RoleViewModel.Member
+                    };
+                    _userService.Create(mapper.Map<UserDTO>(userviewmodel));
+                    await Authenticate(userviewmodel);
                 }
             }
             catch (Exception e)
@@ -87,7 +85,6 @@ namespace BookshopAPI.Controllers
             }
             return Ok(registerviewmodel);
         }
-
         private async Task Authenticate(UserViewModel userviewmodel)
         {
             var claims = new List<Claim>

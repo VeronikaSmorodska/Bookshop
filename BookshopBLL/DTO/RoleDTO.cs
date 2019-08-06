@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookshopBLL.DTO
+﻿namespace BookshopBLL.DTO
 {
     public enum RoleDTO
     {

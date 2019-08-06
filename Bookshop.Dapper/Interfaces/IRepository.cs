@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Bookshop.Dapper.Interfaces
 {
@@ -11,6 +10,5 @@ namespace Bookshop.Dapper.Interfaces
         T Create(T item);
         void Update(T item);
         void Delete(Guid id);
-
     }
 }

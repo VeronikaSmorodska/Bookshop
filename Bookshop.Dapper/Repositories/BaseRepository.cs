@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
+﻿using System.Data;
 
 namespace Bookshop.Dapper.Repositories
 {
@@ -9,7 +6,6 @@ namespace Bookshop.Dapper.Repositories
     {
         protected IDbTransaction Transaction { get; private set; }
         protected IDbConnection Connection { get { return Transaction.Connection; } }
-
         public BaseRepository(IDbTransaction transaction)
         {
             Transaction = transaction;

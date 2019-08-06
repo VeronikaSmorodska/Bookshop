@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BookshopBLL.DTO
 {
@@ -11,5 +10,9 @@ namespace BookshopBLL.DTO
         public decimal Price { get; set; }
         public string Type { get; set; }
         public ICollection<AuthorDTO> Authors { get; set; }
+        public BookDTO()
+        {
+            BookId = Guid.NewGuid();
+        }
     }
 }

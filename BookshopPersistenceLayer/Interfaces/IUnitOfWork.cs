@@ -1,7 +1,5 @@
 ﻿using BookshopPersistenceLayer.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BookshopPersistenceLayer.Interfaces
 {

@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookshopAPI.Controllers
 {
-
-    
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -37,7 +35,7 @@ namespace BookshopAPI.Controllers
             UserDTO userDto =_userService.Get(id);
             if (userDto is null)
             {
-                return NotFound();
+                return NotFound("Object with this id does not exist.");
             }
             var user = mapper.Map<UserViewModel>(userDto);
             return Ok(user);
@@ -54,7 +52,6 @@ namespace BookshopAPI.Controllers
             var users = mapper.Map<IEnumerable<UserDTO>, List<UserViewModel>>(userDtos);
             return Ok(users);
         }
-
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult<UserViewModel> Create(UserViewModel userviewmodel)
@@ -66,18 +63,17 @@ namespace BookshopAPI.Controllers
             return CreatedAtAction("Create", userviewmodel);
         }
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public ActionResult<UserViewModel> Delete(Guid id)
         {
-            _userService.Delete(id);
-            IEnumerable<UserDTO> userDtos = _userService.GetAll();
-            GetAll();
+            UserDTO userDto = _userService.Delete(id);
+            var user = mapper.Map<UserViewModel>(userDto);
+            return Ok(user);
         }
         [HttpPut]
-        public ActionResult<UserViewModel> Update(UserViewModel userviewmodel)
+        public ActionResult Update(UserViewModel userviewmodel)
         {
             _userService.Update(mapper.Map<UserDTO>(userviewmodel));
-
-            return CreatedAtAction("Create", userviewmodel);
+            return NoContent();
         }
     }
 }

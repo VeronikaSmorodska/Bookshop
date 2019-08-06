@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using BookshopBLL.DTO;
 using BookshopBLL.Interfaces;
-//using Bookshop.Dapper.Entities;
-//using Bookshop.Dapper.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using BookshopPersistenceLayer.Interfaces;
 using BookshopPersistenceLayer.Entities;
 
@@ -37,10 +34,11 @@ namespace BookshopBLL.Services
             Database.Books.Create(mapper.Map<Book>(bookDTO));
             Database.Save();
         }
-        public void Delete(Guid id)
+        public BookDTO  Delete(Guid id)
         {
-            Database.Books.Delete(id);
+            BookDTO bookDto= mapper.Map<Book, BookDTO>(Database.Books.Delete(id));
             Database.Save();
+            return bookDto;
         }
         public void Update(BookDTO bookDTO)
         {

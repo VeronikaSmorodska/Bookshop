@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BookshopPersistenceLayer.Entities
+﻿namespace BookshopPersistenceLayer.Entities
 {
     public enum  Role
     {

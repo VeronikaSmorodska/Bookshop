@@ -4,9 +4,7 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace Bookshop.Dapper.Repositories
 {
@@ -37,23 +35,12 @@ namespace Bookshop.Dapper.Repositories
                 },
                 transaction: Transaction,
                 splitOn: "AuthorId,BookId");
-                //.GroupBy(o => o.Auth)
-                //.Select(group =>
-                //{
-                //    var combinedAuthor = group.First();
-                //    combinedAuthor.Authorships = group.Select(author => author.Authorships).FirstOrDefault();
-                //    return combinedAuthor;
-                //});
             return authors;
         }
 
         public Author Get(Guid id)
         {
             Author authorById = null;
-
-            //authorById = Connection.Query<Author>("SELECT * FROM Authors LEFT JOIN Authorships ON Authors.AuthorId = Authorships.AuthorId WHERE Authors.AuthorId = @id", new { id }, transaction: Transaction)
-            //  .FirstOrDefault();
-
             authorById = Connection.Query<Author, Book, Author>(
                 "SELECT * FROM Authors LEFT JOIN Authorships ON Authors.AuthorId = Authorships.AuthorId LEFT JOIN Books ON Books.BookId = Authorships.BookId  WHERE Authors.AuthorId = @id",
                 (author, book) =>
@@ -66,20 +53,13 @@ namespace Bookshop.Dapper.Repositories
                     {
                         author.Authorships = new List<Authorship>();
                     }
-                    author.Authorships.Add(new Authorship() { Book=book });
+                    author.Authorships.Add(new Authorship() { Book = book });
 
 
                     return author;
                 }, new { id },
                 transaction: Transaction,
                 splitOn: "AuthorId, BookId").FirstOrDefault();
-            //var sql = "SELECT * FROM Authors WHERE ID = @id;SELECT Book FROm Authorships Where Authors.ID = Authorships.AuthorId;";
-            //authorById = Connection.QueryMultiple(sql,
-            //    new { id },
-            //    transaction: Transaction);
-            //authorById = results.ReadFirst<Author>();
-            //var book = results.Read<Book>();
-
             return authorById;
         }
 
@@ -97,18 +77,17 @@ namespace Bookshop.Dapper.Repositories
                 Connection.Execute(innerQuery, authorship.Book, transaction: Transaction);
             }
             var sqlQuery = "INSERT INTO Authors (AuthorId, Name) VALUES(@AuthorId, @Name);";
-            Connection.Execute(sqlQuery, new { AuthorId = author.AuthorId, Name = author.Name }, transaction: Transaction);
+            Connection.Execute(sqlQuery, new { author.AuthorId, author.Name }, transaction: Transaction);
 
-            foreach(var authorship in author.Authorships)
+            foreach (var authorship in author.Authorships)
             {
-                
+
                 Connection.Execute($"INSERT INTO Authorships (AuthorshipId, AuthorId, BookId) VALUES(@AuthorshipId, @AuthorId, @BookId)",
-                                   new {AuthorshipId=authorship.AuthorshipId,AuthorId = author.AuthorId, BookId = authorship.BookId  },
+                                   new { authorship.AuthorshipId, author.AuthorId, authorship.BookId },
                                    transaction: Transaction);
             }
             return author;
         }
-
         public void Update(Author author)
         {
             var bookIds = new List<Guid>();
@@ -129,19 +108,16 @@ namespace Bookshop.Dapper.Repositories
 
             foreach (var authorship in author.Authorships)
             {
-                var existingAuthorship = Connection.Query<Author>("SELECT * FROM Authorships WHERE AuthorId = @AuthorId AND BookId = @BookId ", new { AuthorId = author.AuthorId, BookId = authorship.BookId }, transaction: Transaction)
+                var existingAuthorship = Connection.Query<Author>("SELECT * FROM Authorships WHERE AuthorId = @AuthorId AND BookId = @BookId ", new { author.AuthorId, authorship.BookId }, transaction: Transaction)
                      .FirstOrDefault();
                 if (existingAuthorship == null)
                 {
                     Connection.Execute($"INSERT INTO Authorships (AuthorshipId, AuthorId, BookId) VALUES(@AuthorshipId, @AuthorId, @BookId)",
-                                   new { AuthorshipId = authorship.AuthorshipId, AuthorId = author.AuthorId, BookId = authorship.BookId },
+                                   new { authorship.AuthorshipId, author.AuthorId, authorship.BookId },
                                    transaction: Transaction);
                 }
-                
             }
-
         }
-
         public void Delete(Guid id)
         {
             var author = Connection.Query<Author>("SELECT * FROM Authors WHERE AuthorId = @id ", new { id }, transaction: Transaction)
@@ -154,11 +130,9 @@ namespace Bookshop.Dapper.Repositories
         }
         public IEnumerable<Author> GetAuthorsByBookId(Guid bookId)
         {
-            IEnumerable<Author> authorOfBooks = new List<Author>();
-
-            authorOfBooks = Connection.Query<Author>(
+            IEnumerable<Author> authorOfBooks = Connection.Query<Author>(
                 "SELECT * FROM Authorships INNER JOIN Authors ON Authorships.AuthorId=Authors.AuthorId WHERE Authorships.BookId=@bookId;",
-                 new {bookId},
+                 new { bookId },
                 transaction: Transaction);
             return authorOfBooks;
         }

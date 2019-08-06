@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BookshopBLL.DTO
 {
@@ -12,7 +10,10 @@ namespace BookshopBLL.DTO
         public string Login { get; set; }
         public string Password { get; set; }
         public RoleDTO Role { get; set; }
-        
+        public UserDTO()
+        {
+            UserId = Guid.NewGuid();
+        }
     }
 }
 

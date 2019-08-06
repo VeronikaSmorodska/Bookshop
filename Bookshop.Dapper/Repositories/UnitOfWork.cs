@@ -1,10 +1,8 @@
 ﻿using Bookshop.Dapper.Entities;
 using Bookshop.Dapper.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 
 namespace Bookshop.Dapper.Repositories
 {
@@ -23,8 +21,6 @@ namespace Bookshop.Dapper.Repositories
             _connection.Open();
             _transaction = _connection.BeginTransaction();
         }
-
-
         public IBookRepository Books
         {
             get { return _bookRepository ?? (_bookRepository = new BookRepository(_transaction)); }
@@ -37,8 +33,6 @@ namespace Bookshop.Dapper.Repositories
         {
             get { return _userRepository ?? (_userRepository = new UserRepository(_transaction)); }
         }
-
-
         public void Save()
         {
             try
@@ -54,24 +48,21 @@ namespace Bookshop.Dapper.Repositories
             {
                 _transaction.Dispose();
                 _transaction = _connection.BeginTransaction();
-                resetRepositories();
+                ResetRepositories();
             }
         }
-
-        private void resetRepositories()
+        private void ResetRepositories()
         {
             _bookRepository = null;
             _authorRepository = null;
             _userRepository = null;
         }
-
         public void Dispose()
         {
-            dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        private void dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
@@ -91,10 +82,9 @@ namespace Bookshop.Dapper.Repositories
                 _disposed = true;
             }
         }
-
         ~UnitOfWork()
         {
-            dispose(false);
+            Dispose(false);
         }
     }
 }

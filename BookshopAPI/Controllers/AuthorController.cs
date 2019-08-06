@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using BookshopBLL.DTO;
 using BookshopAPI.Models;
-
 using BookshopBLL.Interfaces;
 using System;
 using Microsoft.AspNetCore.Authorization;
@@ -45,7 +44,7 @@ namespace BookshopAPI.Controllers
             AuthorDTO authorDto = _authorService.Get(id);
             if(authorDto is null)
             {
-                return NotFound();
+                return NotFound("Object with this id does not exist.");
             }
             var author = mapper.Map<AuthorViewModel>(authorDto);
             return Ok(author);
@@ -59,16 +58,18 @@ namespace BookshopAPI.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public ActionResult<AuthorViewModel> Delete(Guid id)
         {
-            _authorService.Delete(id);
+           AuthorDTO authorDto= _authorService.Delete(id);
+            var author = mapper.Map<AuthorViewModel>(authorDto);
+            return Ok(author);
         }
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public ActionResult<AuthorViewModel> Update(AuthorViewModel authorviewmodel)
+        public ActionResult Update(AuthorViewModel authorviewmodel)
         {
             _authorService.Update(mapper.Map<AuthorDTO>(authorviewmodel));
-            return CreatedAtAction("Update", authorviewmodel);
+            return NoContent();
         }
     }
 }

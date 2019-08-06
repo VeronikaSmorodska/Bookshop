@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
 using BookshopBLL.DTO;
 using BookshopBLL.Interfaces;
 using BookshopPersistenceLayer.Interfaces;
 using BookshopPersistenceLayer.Entities;
 using System;
-//using Bookshop.Dapper.Entities;
-//using Bookshop.Dapper.Interfaces;
+using BookshopBLL.Infrastructure;
 
 namespace BookshopBLL.Services
 {
@@ -32,15 +29,23 @@ namespace BookshopBLL.Services
         }
         public void Create(UserDTO userDTO)
         {
-            
-            Database.Users.Create(mapper.Map<User>(userDTO));
+            UserDTO userHashed = new UserDTO
+            {
+                UserId = userDTO.UserId,
+                Name = userDTO.Name,
+                Surname = userDTO.Surname,
+                Login = userDTO.Login,
+                Password = HashData.GenerateSHA512(userDTO.Password),
+                Role = userDTO.Role 
+            };
+            Database.Users.Create(mapper.Map<User>(userHashed));
             Database.Save();
         }
-
-        public void Delete(Guid id)
+        public UserDTO Delete(Guid id)
         {
-            Database.Users.Delete(id);
+            UserDTO userDto = mapper.Map<User, UserDTO>(Database.Users.Delete(id));
             Database.Save();
+            return userDto;
         }
         public void Update(UserDTO userDTO)
         {
@@ -55,8 +60,10 @@ namespace BookshopBLL.Services
         }
         public bool TestUser(String login, String password)
         {
+            String passwordHashed = HashData.GenerateSHA512(password);
             IEnumerable<User> users = Database.Users.GetAll();
-            bool isARealUser = users.Any(u => u.Login == login && u.Password == password);
+
+            bool isARealUser = users.Any(u => u.Login == login && u.Password == passwordHashed);
             return isARealUser;
         }
         public UserDTO GetByLogin(string login)

@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using BookshopBLL.DTO;
 using BookshopAPI.Models;
-
 using BookshopBLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BookshopAPI.Controllers
 {
-    
+
     [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
@@ -37,7 +36,7 @@ namespace BookshopAPI.Controllers
         [HttpGet("{id}/authors")]
         public ActionResult<AuthorViewModel> GetAuthors(Guid id)
         {
-            IEnumerable<AuthorDTO> authorDtos =_bookService.GetAuthors(id);
+            IEnumerable<AuthorDTO> authorDtos = _bookService.GetAuthors(id);
             var authors = mapper.Map<List<AuthorViewModel>>(authorDtos);
             return Ok(authors);
         }
@@ -46,10 +45,10 @@ namespace BookshopAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<BookViewModel> Get(Guid id)
         {
-            BookDTO bookDto =_bookService.Get(id);
+            BookDTO bookDto = _bookService.Get(id);
             if (bookDto is null)
             {
-                return NotFound();
+                return NotFound("Object with this id does not exist.");
             }
             var book = mapper.Map<BookViewModel>(bookDto);
             return Ok(book);
@@ -61,17 +60,17 @@ namespace BookshopAPI.Controllers
             return CreatedAtAction("Create", bookviewmodel);
         }
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public ActionResult<BookViewModel> Delete(Guid id)
         {
-            _bookService.Delete(id);
-            IEnumerable<BookDTO> authorDtos = _bookService.GetAll();
-            GetAll();
+            BookDTO bookDto = _bookService.Delete(id);
+            var book = mapper.Map<BookViewModel>(bookDto);
+            return Ok(book);
         }
         [HttpPut]
-        public ActionResult<AuthorViewModel> Update(BookViewModel bookviewmodel)
+        public ActionResult Update(BookViewModel bookviewmodel)
         {
             _bookService.Update(mapper.Map<BookDTO>(bookviewmodel));
-            return CreatedAtAction("Create", bookviewmodel);
+            return NoContent();
         }
     }
 }

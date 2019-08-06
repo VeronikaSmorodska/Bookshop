@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Bookshop.Dapper.Entities
 {
-    public class User : IdentityUser
-    
+    public class User 
     {
         public Guid UserId { get; set; }
         public string Name { get; set; }

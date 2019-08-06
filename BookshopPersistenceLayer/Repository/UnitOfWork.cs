@@ -2,22 +2,15 @@
 using BookshopPersistenceLayer.EntityFramework;
 using BookshopPersistenceLayer.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BookshopPersistenceLayer.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private BookshopContext db;
+        private readonly BookshopContext db;
         private BookRepository bookRepository;
         private AuthorRepository authorRepository;
         private UserRepository userRepository;
-        //public EFUnitOfWork(string connectionString)
-        //{
-        //    db = new BookshopContext(connectionString);
-        //}
-
         public UnitOfWork(BookshopContext context)
         {
             db = context;
@@ -62,8 +55,6 @@ namespace BookshopPersistenceLayer.Repository
         }
 
         private bool disposed = false;
-        private string connection;
-
         public virtual void Dispose(bool disposing)
         {
             if (!this.disposed)

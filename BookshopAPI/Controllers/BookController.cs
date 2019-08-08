@@ -53,6 +53,18 @@ namespace BookshopAPI.Controllers
             var book = mapper.Map<BookViewModel>(bookDto);
             return Ok(book);
         }
+        [AllowAnonymous]
+        [HttpGet("{title}/titles")]
+        public ActionResult<BookViewModel> Get(string title)
+        {
+            IEnumerable<BookDTO> bookDtos = _bookService.GetByTitle(title);
+            if (bookDtos is null)
+            {
+                return NotFound();
+            }
+            var books = mapper.Map<IEnumerable<BookDTO>, List<BookViewModel>>(bookDtos);
+            return Ok(books);
+        }
         [HttpPost]
         public ActionResult<BookViewModel> Create(BookViewModel bookviewmodel)
         {

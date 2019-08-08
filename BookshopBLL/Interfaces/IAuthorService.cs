@@ -9,6 +9,7 @@ namespace BookshopBLL.Interfaces
         void Create(AuthorDTO authorDto);
         IEnumerable<BookDTO> GetBooks(Guid authorId);
         IEnumerable<AuthorDTO> GetAll();
+        IEnumerable<AuthorDTO> GetByName(string name);
         AuthorDTO Get(Guid id);
         void Update(AuthorDTO author);
         AuthorDTO Delete(Guid id);

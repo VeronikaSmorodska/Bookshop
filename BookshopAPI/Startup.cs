@@ -20,8 +20,19 @@ namespace BookshopAPI
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200");
+                });
+            });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                   .AddCookie(options =>
                   {
@@ -47,6 +58,7 @@ namespace BookshopAPI
             {
                 app.UseHsts();
             }
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseCookiePolicy();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

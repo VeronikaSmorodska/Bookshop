@@ -49,6 +49,18 @@ namespace BookshopAPI.Controllers
             var author = mapper.Map<AuthorViewModel>(authorDto);
             return Ok(author);
         }
+        [AllowAnonymous]
+        [HttpGet("{name}/names")]
+        public ActionResult<AuthorViewModel> Get(string name)
+        {
+            IEnumerable<AuthorDTO> authorDtos = _authorService.GetByName(name);
+            if (authorDtos is null)
+            {
+                return NotFound();
+            }
+            var authors = mapper.Map<IEnumerable<AuthorDTO>, List<AuthorViewModel>>(authorDtos);
+            return Ok(authors);
+        }
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult<AuthorViewModel> Create(AuthorViewModel authorviewmodel)

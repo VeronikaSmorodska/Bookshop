@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using BookshopPersistenceLayer.Interfaces;
 using BookshopPersistenceLayer.Entities;
+using System.Linq;
 
 namespace BookshopBLL.Services
 {
@@ -28,6 +29,12 @@ namespace BookshopBLL.Services
         public BookDTO Get(Guid id)
         {
             return mapper.Map<Book, BookDTO>(Database.Books.Get(id));
+        }
+        public IEnumerable<BookDTO> GetByTitle(string title)
+        {
+            IEnumerable<BookDTO> books = mapper.Map<IEnumerable<Book>, List<BookDTO>>(Database.Books.GetAll());
+            IEnumerable<BookDTO> booksByTitle = books.Where(b => b.Title == title);
+            return booksByTitle;
         }
         public void Create(BookDTO bookDTO)
         {

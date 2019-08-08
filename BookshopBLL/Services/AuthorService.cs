@@ -5,6 +5,7 @@ using BookshopBLL.DTO;
 using BookshopBLL.Interfaces;
 using BookshopPersistenceLayer.Interfaces;
 using BookshopPersistenceLayer.Entities;
+using System.Linq;
 
 namespace BookshopBLL.Services
 {
@@ -28,6 +29,12 @@ namespace BookshopBLL.Services
         public AuthorDTO Get(Guid id)
         {
             return mapper.Map<Author, AuthorDTO>(Database.Authors.Get(id));
+        }
+        public IEnumerable<AuthorDTO> GetByName(string name)
+        {
+            IEnumerable<AuthorDTO> authors = mapper.Map<IEnumerable<Author>, List<AuthorDTO>>(Database.Authors.GetAll());
+            IEnumerable<AuthorDTO> authorsByName = authors.Where(a => a.Name == name);
+            return authorsByName;
         }
         public void Create(AuthorDTO authorDTO)
         {

@@ -16,7 +16,6 @@ namespace BookshopPersistenceLayer.Repository
         }
         public void Create(User user)
         {
-            
             db.Users.Add(user);
         }
         public User Delete(Guid id)

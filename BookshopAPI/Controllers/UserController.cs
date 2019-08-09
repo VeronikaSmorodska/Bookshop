@@ -52,7 +52,7 @@ namespace BookshopAPI.Controllers
             var users = mapper.Map<IEnumerable<UserDTO>, List<UserViewModel>>(userDtos);
             return Ok(users);
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult<UserViewModel> Create(UserViewModel userviewmodel)
         {
@@ -62,14 +62,14 @@ namespace BookshopAPI.Controllers
             }
             return CreatedAtAction("Create", userviewmodel);
         }
-        [HttpDelete("{id}")]
+        //[HttpDelete("{id}")]
         public ActionResult<UserViewModel> Delete(Guid id)
         {
             UserDTO userDto = _userService.Delete(id);
             var user = mapper.Map<UserViewModel>(userDto);
             return Ok(user);
         }
-        [HttpPut]
+       // [HttpPut]
         public ActionResult Update(UserViewModel userviewmodel)
         {
             _userService.Update(mapper.Map<UserDTO>(userviewmodel));

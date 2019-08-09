@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace BookshopAPI.Controllers
 {
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BookController : ControllerBase
@@ -32,7 +32,7 @@ namespace BookshopAPI.Controllers
             return Ok(books);
         }
         [AllowAnonymous]
-        [Authorize(Roles = "Admin, Member")]
+        //[Authorize(Roles = "Admin, Member")]
         [HttpGet("{id}/authors")]
         public ActionResult<AuthorViewModel> GetAuthors(Guid id)
         {
@@ -41,7 +41,7 @@ namespace BookshopAPI.Controllers
             return Ok(authors);
         }
         [AllowAnonymous]
-        [Authorize(Roles = "Admin, Member")]
+       //[Authorize(Roles = "Admin, Member")]
         [HttpGet("{id}")]
         public ActionResult<BookViewModel> Get(Guid id)
         {

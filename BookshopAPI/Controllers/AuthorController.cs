@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookshopAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")] 
     [ApiController]
     public class AuthorController : ControllerBase
@@ -61,14 +61,14 @@ namespace BookshopAPI.Controllers
             var authors = mapper.Map<IEnumerable<AuthorDTO>, List<AuthorViewModel>>(authorDtos);
             return Ok(authors);
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult<AuthorViewModel> Create(AuthorViewModel authorviewmodel)
         {
             _authorService.Create(mapper.Map<AuthorDTO>(authorviewmodel));
             return CreatedAtAction("Create", authorviewmodel);
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public ActionResult<AuthorViewModel> Delete(Guid id)
         {
@@ -76,7 +76,7 @@ namespace BookshopAPI.Controllers
             var author = mapper.Map<AuthorViewModel>(authorDto);
             return Ok(author);
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut]
         public ActionResult Update(AuthorViewModel authorviewmodel)
         {

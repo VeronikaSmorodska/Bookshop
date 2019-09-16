@@ -6,6 +6,8 @@ using BookshopBLL.DTO;
 using BookshopAPI.Models;
 using BookshopBLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Stripe;
+using Stripe.Checkout;
 
 namespace BookshopAPI.Controllers
 {
@@ -41,7 +43,7 @@ namespace BookshopAPI.Controllers
             return Ok(authors);
         }
         [AllowAnonymous]
-       //[Authorize(Roles = "Admin, Member")]
+        //[Authorize(Roles = "Admin, Member")]
         [HttpGet("{id}")]
         public ActionResult<BookViewModel> Get(Guid id)
         {
@@ -52,8 +54,10 @@ namespace BookshopAPI.Controllers
             }
             var book = mapper.Map<BookViewModel>(bookDto);
             return Ok(book);
+            //return View(book);
         }
-        [AllowAnonymous]
+
+        //[AllowAnonymous]
         [HttpGet("{title}/titles")]
         public ActionResult<BookViewModel> Get(string title)
         {
@@ -64,6 +68,7 @@ namespace BookshopAPI.Controllers
             }
             var books = mapper.Map<IEnumerable<BookDTO>, List<BookViewModel>>(bookDtos);
             return Ok(books);
+
         }
         [HttpPost]
         public ActionResult<BookViewModel> Create(BookViewModel bookviewmodel)
@@ -84,5 +89,6 @@ namespace BookshopAPI.Controllers
             _bookService.Update(mapper.Map<BookDTO>(bookviewmodel));
             return NoContent();
         }
+
     }
 }

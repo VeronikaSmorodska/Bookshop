@@ -62,7 +62,7 @@ namespace BookshopAPI.Controllers
             }
             return CreatedAtAction("Create", userviewmodel);
         }
-        //[HttpDelete("{id}")]
+        [HttpDelete("{id}")]
         public ActionResult<UserViewModel> Delete(Guid id)
         {
             UserDTO userDto = _userService.Delete(id);

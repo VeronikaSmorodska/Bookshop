@@ -1,0 +1,20 @@
+﻿@model BookshopAPI.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+<form action="/Account" method="get">
+    <label>
+        Login:<br />
+        <input value="@Model.Login" id="Login" name="Login" type="text" />
+    </label><br />
+    <label>
+        Password:<br />
+        <input value="@Model.Password" id="Password" name="Password" type="Password" />
+    </label><br />
+            
+                Remember Me:<br/>
+                <input type="radio" name="RememberMe" value="true" > True<br>
+                <input type="radio" name="RememberMe" value="false" checked> Female<br>
+</form>

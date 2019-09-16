@@ -10,11 +10,15 @@ using BookshopBLL.Automapper;
 using BookshopAPI.Automapper;
 using BookshopBLL.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
+using Microsoft.AspNetCore.Http;
+using Stripe;
 
 namespace BookshopAPI
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,6 +28,12 @@ namespace BookshopAPI
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                
+                
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -41,6 +51,8 @@ namespace BookshopAPI
                   {
                       options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/api/Account/AccessDenied");
                   });
+            
+               
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Install(Configuration);
             var mappingConfig = new MapperConfiguration(mc =>
@@ -61,7 +73,8 @@ namespace BookshopAPI
             {
                 app.UseHsts();
             }
-            //app.UseCors(options => options.WithOrigins(Configuration["trustedCors"].Split(' ')).AllowAnyMethod().AllowAnyHeader());
+            app.UseSession();
+            
             app.UseCors(MyAllowSpecificOrigins);
             app.UseCookiePolicy();
             app.UseHttpsRedirection();

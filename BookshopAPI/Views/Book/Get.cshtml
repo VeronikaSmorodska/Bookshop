@@ -1,0 +1,18 @@
+﻿@model BookshopAPI.Models.BookViewModel
+@{
+    ViewData["Title"] = "Get";
+}
+
+<h2>Get</h2>
+
+<form action="/checkout" method="post">
+    <div><span>id: </span>@Model.BookId</div>
+    <input value="@Model.BookId" id="BookId" name="BookId" type="text" hidden /><br />
+    <div><span>title: </span>@Model.Title</div>
+    <input value="@Model.Title" id="Title" name="Title" type="text" hidden /> <br />
+    <div><span>type: </span>@Model.Type</div>
+    <input value="@Model.Type" id="Type" name="Type" type="text" hidden /><br />
+    <div><span>price: </span>@Model.Price</div>
+    <input value="@Model.Price" id="Price" name="Price" type="text" hidden /> <br />
+    <button type="submit">Buy</button>
+</form>

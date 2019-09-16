@@ -1,0 +1,17 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopAPI.Controllers.Model
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<form action="/checkout" method="post">
+    <input value="5ad957bd-ebdb-4b42-8afe-08d71c9e4b0c" asp-for="BookId" type="text" hidden /><br />
+    <input value="Hobbit" id="Title" asp-for="Title" type="text" hidden/> <br />
+    <input value="upd type" id="Type" asp-for="Type" type="text"hidden /><br />
+    <input value="1111.00" id="Price" asp-for="Price" type="text" hidden/> <br />
+    <button type="submit">Buy</button>
+</form>
+
+@*<script src="https://js.stripe.com/v3/"></script>*@

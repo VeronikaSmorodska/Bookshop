@@ -24,10 +24,16 @@ namespace BookshopAPI.Controllers
             _userService = serv;
             mapper = _mapper;
         }
+        [HttpGet("[action]")]
+        public IActionResult Index()
+        {
+            return View();
+        }
         [HttpGet]
         public IActionResult Login()
         {
             return Ok();
+            //return View();
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Login(LoginViewModel loginviewmodel)
@@ -49,6 +55,7 @@ namespace BookshopAPI.Controllers
                 ModelState.AddModelError("", "Invalid login or password");
             }
             return Ok(loginviewmodel);
+            
         }
         [HttpGet]
         public IActionResult Register()

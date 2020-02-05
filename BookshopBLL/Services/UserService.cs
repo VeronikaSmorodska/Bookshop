@@ -75,8 +75,8 @@ namespace BookshopBLL.Services
         public IEnumerable<UserDTO> GetByName(string name)
         {
             IEnumerable<UserDTO> users = mapper.Map<IEnumerable<User>, List<UserDTO>>(Database.Users.GetAll());
-            IEnumerable<UserDTO> searchInNames = users.Where(u => u.Name == name);
-            IEnumerable<UserDTO> searchInSurnames = users.Where(u => u.Surname == name);
+            IEnumerable<UserDTO> searchInNames = users.Where(u => u.Name.ToLower().Contains(name.ToLower()));
+            IEnumerable<UserDTO> searchInSurnames = users.Where(u => u.Surname.ToLower().Contains(name.ToLower()));
             IEnumerable<UserDTO> userByName=searchInNames.Union(searchInSurnames).ToList();
             return userByName;
         }

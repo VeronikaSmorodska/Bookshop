@@ -27,7 +27,8 @@ namespace BookshopAPI.Controllers
         [HttpGet("[action]")]
         public IActionResult Index()
         {
-            return View();
+            return Ok();
+            //return View();
         }
         [HttpGet]
         public IActionResult Login()
@@ -43,7 +44,7 @@ namespace BookshopAPI.Controllers
                 bool isARealUser = _userService.TestUser(loginviewmodel.Login, loginviewmodel.Password);
                 if (isARealUser == false)
                 {
-                    return BadRequest("User with such login and passwod does not exist.");
+                    return BadRequest("User with such login and password does not exist.");
                 }
                 if (isARealUser == true)
                 {
@@ -55,8 +56,9 @@ namespace BookshopAPI.Controllers
                 ModelState.AddModelError("", "Invalid login or password");
             }
             return Ok(loginviewmodel);
-            
+
         }
+       
         [HttpGet]
         public IActionResult Register()
         {

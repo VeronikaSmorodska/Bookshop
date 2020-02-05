@@ -33,7 +33,7 @@ namespace BookshopBLL.Services
         public IEnumerable<BookDTO> GetByTitle(string title)
         {
             IEnumerable<BookDTO> books = mapper.Map<IEnumerable<Book>, List<BookDTO>>(Database.Books.GetAll());
-            IEnumerable<BookDTO> booksByTitle = books.Where(b => b.Title == title);
+            IEnumerable<BookDTO> booksByTitle = books.Where(b => b.Title.ToLower().Contains(title.ToLower()));
             return booksByTitle;
         }
         public void Create(BookDTO bookDTO)

@@ -33,7 +33,7 @@ namespace BookshopBLL.Services
         public IEnumerable<AuthorDTO> GetByName(string name)
         {
             IEnumerable<AuthorDTO> authors = mapper.Map<IEnumerable<Author>, List<AuthorDTO>>(Database.Authors.GetAll());
-            IEnumerable<AuthorDTO> authorsByName = authors.Where(a => a.Name == name);
+            IEnumerable<AuthorDTO> authorsByName = authors.Where(a => a.Name.ToLower().Contains(name.ToLower()));
             return authorsByName;
         }
         public void Create(AuthorDTO authorDTO)
